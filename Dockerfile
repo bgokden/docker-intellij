@@ -1,5 +1,4 @@
-FROM ubuntu:15.10
-MAINTAINER Florin Patan "florinpatan@gmail.com"
+FROM ubuntu:14.04.4
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
@@ -12,13 +11,21 @@ RUN sed 's/main$/main universe/' -i /etc/apt/sources.list && \
     apt-get update -qq && \
     echo 'Installing JAVA 8' && \
     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-get install -qq -y --fix-missing oracle-java8-installer && \
+    apt-get install -qq -y --fix-missing oracle-java8-installer git wget nano && \
     echo 'Cleaning up' && \
     apt-get clean -qq -y && \
     apt-get autoclean -qq -y && \
     apt-get autoremove -qq -y &&  \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
+    
+ENV MAVEN_VERSION 3.3.9
+
+RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xzf - -C /usr/share \
+  && mv /usr/share/apache-maven-$MAVEN_VERSION /usr/share/maven \
+  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
+ENV MAVEN_HOME /usr/share/maven
 
 RUN echo 'Creating user: developer' && \
     mkdir -p /home/developer && \
@@ -67,6 +74,11 @@ RUN echo 'Installing Markdown plugin' && \
     wget https://plugins.jetbrains.com/files/7793/22165/markdown.zip -O markdown.zip -q && \
     unzip -q markdown.zip && \
     rm markdown.zip
+    
+RUN echo 'Installing Scala plugin' && \
+    wget https://plugins.jetbrains.com/plugin/download?pr=&updateId=23664 -O scala.zip -q && \
+    unzip -q scala.zip && \
+    rm scala.zip
 
 USER developer
 ENV HOME /home/developer
