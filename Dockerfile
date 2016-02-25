@@ -1,17 +1,21 @@
 FROM ubuntu:14.04.4
 
+ADD setproxyforaptget.sh /tmp/
+RUN chmod +x /tmp/setproxyforaptget.sh
+RUN /tmp/setproxyforaptget.sh
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 RUN sed 's/main$/main universe/' -i /etc/apt/sources.list && \
     apt-get update -qq && \
     echo 'Installing OS dependencies' && \
     apt-get install -qq -y --fix-missing sudo software-properties-common git libxext-dev libxrender-dev libxslt1.1 \
-        libxtst-dev libgtk2.0-0 libcanberra-gtk-module unzip && \
+        libxtst-dev libgtk2.0-0 libcanberra-gtk-module unzip nano curl && \
     add-apt-repository ppa:webupd8team/java -y && \
     apt-get update -qq && \
     echo 'Installing JAVA 8' && \
     echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    apt-get install -qq -y --fix-missing oracle-java8-installer git wget nano && \
+    apt-get install -qq -y --fix-missing oracle-java8-installer && \
     echo 'Cleaning up' && \
     apt-get clean -qq -y && \
     apt-get autoclean -qq -y && \
@@ -21,7 +25,9 @@ RUN sed 's/main$/main universe/' -i /etc/apt/sources.list && \
     
 ENV MAVEN_VERSION 3.3.9
 
-RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xzf - -C /usr/share \
+RUN cd /etc/ssl/certs | wget http://curl.haxx.se/ca/cacert.pem | cd - | sudo update-ca-certificates
+
+RUN curl -sSL https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xzf - -C /usr/share \
   && mv /usr/share/apache-maven-$MAVEN_VERSION /usr/share/maven \
   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
