@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:14.04
 
 ADD setproxyforaptget.sh /tmp/
 RUN chmod +x /tmp/setproxyforaptget.sh
@@ -8,6 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 RUN sed 's/main$/main universe/' -i /etc/apt/sources.list && \
     apt-get update -qq && \
+    apt-get upgrade -y && \
     echo 'Installing OS dependencies' && \
     apt-get install -qq -y --fix-missing sudo software-properties-common git libxext-dev libxrender-dev libxslt1.1 \
         libxtst-dev libgtk2.0-0 libcanberra-gtk-module unzip nano curl && \
@@ -25,9 +26,9 @@ RUN sed 's/main$/main universe/' -i /etc/apt/sources.list && \
     
 ENV MAVEN_VERSION 3.3.9
 
-RUN cd /etc/ssl/certs | wget http://curl.haxx.se/ca/cacert.pem | cd - | sudo update-ca-certificates
+#RUN cd /etc/ssl/certs | wget http://curl.haxx.se/ca/cacert.pem | cd - | sudo update-ca-certificates
 
-RUN curl -sSL https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xzf - -C /usr/share \
+RUN curl -fsSL https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar xzf - -C /usr/share \
   && mv /usr/share/apache-maven-$MAVEN_VERSION /usr/share/maven \
   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
@@ -82,7 +83,7 @@ RUN echo 'Installing Markdown plugin' && \
     rm markdown.zip
     
 RUN echo 'Installing Scala plugin' && \
-    wget https://plugins.jetbrains.com/plugin/download?pr=&updateId=23664 -O scala.zip -q && \
+    wget https://plugins.jetbrains.com/files/1347/23664/scala-intellij-bin-2.2.0.zip -O scala.zip -q && \
     unzip -q scala.zip && \
     rm scala.zip
 
