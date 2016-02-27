@@ -23,7 +23,7 @@ RUN sed 's/main$/main universe/' -i /etc/apt/sources.list && \
     apt-get autoremove -qq -y &&  \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
-    
+
 ENV MAVEN_VERSION 3.3.9
 
 #RUN cd /etc/ssl/certs | wget http://curl.haxx.se/ca/cacert.pem | cd - | sudo update-ca-certificates
@@ -81,15 +81,20 @@ RUN echo 'Installing Markdown plugin' && \
     wget https://plugins.jetbrains.com/files/7793/22165/markdown.zip -O markdown.zip -q && \
     unzip -q markdown.zip && \
     rm markdown.zip
-    
+
 RUN echo 'Installing Scala plugin' && \
     wget https://plugins.jetbrains.com/files/1347/23664/scala-intellij-bin-2.2.0.zip -O scala.zip -q && \
     unzip -q scala.zip && \
     rm scala.zip
 
+RUN mkdir /home/freshinstall && cp -r /home/developer/.IdeaIC15 /home/freshinstall
+
+#install docker client
+RUN curl -sSL https://get.docker.com/ | sh && usermod -aG docker developer
+
 USER developer
 ENV HOME /home/developer
 ENV GOPATH /home/developer/go
 ENV PATH $PATH:/home/developer/go/bin:/usr/local/go/bin
-WORKDIR /home/developer/go
+WORKDIR /home/developer
 CMD /usr/local/bin/intellij

@@ -1,23 +1,9 @@
 #!/usr/bin/env bash
 
+echo "run intellij"
 function delayedPluginInstall {
-    sudo mkdir -p /home/developer/.IdeaIC15/config/plugins
-    sudo mkdir -p /home/developer/.IdeaIC15/config/options
-    sudo chown developer:developer -R /home/developer/.IdeaIC15
-
-    cd /home/developer/.IdeaIC15/config/plugins/
-
-    echo 'Installing Go plugin'
-    wget https://plugins.jetbrains.com/files/5047/22601/Go-0.10.749.zip -O go.zip -q && unzip -q go.zip && rm go.zip
-
-    echo 'Installing .ignore plugin'
-    wget https://plugins.jetbrains.com/files/7495/20861/idea-gitignore.jar -O /home/developer/.IdeaIC15/config/plugins/idea-gitignore.jar -q
-
-    echo 'Installing Markdown support plugin'
-    wget https://plugins.jetbrains.com/files/7793/22165/markdown.zip -O markdown.zip -q && unzip -q markdown.zip && rm markdown.zip
-
-    # Adding the predefined preferences to IDEA
-    cp /home/developer/.jdk.table.xml /home/developer/.IdeaIC15/config/options/jdk.table.xml
+    echo "copying plugins & configs into home folder"
+    cp -r /home/freshinstall/.IdeaIC15 /home/developer
 }
 
 if [ ! -d /home/developer/.IdeaIC15/config/plugins/Go ]; then
@@ -25,9 +11,8 @@ if [ ! -d /home/developer/.IdeaIC15/config/plugins/Go ]; then
     delayedPluginInstall
 fi
 
-if [ -d /home/developer/.IdeaIC15 ]; then
-    # Ensure proper permissions
-    sudo chown developer:developer -R /home/developer/.IdeaIC15
-fi
+sudo chown developer:developer -R /home/developer
+
+exec /etc/setproxyforaptget.sh
 
 exec /opt/intellij/bin/idea.sh
