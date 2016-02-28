@@ -13,6 +13,6 @@ fi
 
 sudo chown developer:developer -R /home/developer
 
-exec /etc/setproxyforaptget.sh
+sudo /etc/setproxyforaptget.sh
 
 exec /opt/intellij/bin/idea.sh

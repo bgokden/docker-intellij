@@ -1,8 +1,8 @@
 FROM ubuntu:14.04
 
-ADD setproxyforaptget.sh /tmp/
-RUN chmod +x /tmp/setproxyforaptget.sh
-RUN /tmp/setproxyforaptget.sh
+ADD setproxyforaptget.sh /etc/
+RUN chmod +x /etc/setproxyforaptget.sh
+RUN /etc/setproxyforaptget.sh
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
