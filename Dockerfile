@@ -78,12 +78,14 @@ RUN echo 'Installing .ignore plugin' && \
     wget https://plugins.jetbrains.com/files/7495/20861/idea-gitignore.jar -O /home/developer/.IdeaIC15/config/plugins/idea-gitignore.jar -q
 
 RUN echo 'Installing Markdown plugin' && \
-    wget https://plugins.jetbrains.com/files/7793/22165/markdown.zip -O markdown.zip -q && \
+    wget https://plugins.jetbrains.com/files/7793/22165/markdown.zip -O /home/developer/.IdeaIC15/config/plugins/markdown.zip -q && \
+    cd /home/developer/.IdeaIC15/config/plugins/ && \
     unzip -q markdown.zip && \
     rm markdown.zip
 
 RUN echo 'Installing Scala plugin' && \
-    wget https://plugins.jetbrains.com/files/1347/23664/scala-intellij-bin-2.2.0.zip -O scala.zip -q && \
+    wget https://plugins.jetbrains.com/files/1347/23664/scala-intellij-bin-2.2.0.zip -O /home/developer/.IdeaIC15/config/plugins/scala.zip -q && \
+    cd /home/developer/.IdeaIC15/config/plugins/ && \
     unzip -q scala.zip && \
     rm scala.zip
 
