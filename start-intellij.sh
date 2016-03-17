@@ -6,5 +6,5 @@ docker run -tdi \
 	   --net=host \
 	   -v /var/run/docker.sock:/var/run/docker.sock \
            -v /tmp/.X11-unix:/tmp/.X11-unix \
-           -v ${HOME}/dockerhome:/home/developer \
+           -v /home/developer:/home/developer \
            berkgokden/intellij-dev-scala
